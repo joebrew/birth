@@ -46,3 +46,21 @@ abline(h = seq(0, 100, 20),
        col = adjustcolor('black', alpha.f = 0.4))
 abline(v = temp$date, 
        col = adjustcolor('black', alpha.f = 0.6))
+
+plot(temp$date, 
+     temp$percentage,
+     type = 'l', 
+     col = adjustcolor('black', alpha.f = 0.6),
+     lwd = 3,
+     xaxt = 'n',
+     xlab = NA,
+     ylab = 'Cumulative probability')
+axis(side = 1,
+     at = temp$date,
+     labels = temp$date,
+     las = 3,
+     cex.axis = 0.7)
+abline(h = seq(0, 100, 2),
+       col = adjustcolor('black', alpha.f = 0.4))
+abline(v = temp$date, 
+       col = adjustcolor('black', alpha.f = 0.6))
