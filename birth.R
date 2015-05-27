@@ -85,19 +85,29 @@ dates <- seq(Sys.Date() - 30, Sys.Date() + 15, 1)
 
 plot(dates, seq(1, 100, length = length(dates)),
      type = 'n', xlab = 'Date',
-     ylab = 'Probability',
+     ylab = 'Cumulative probability of spontaneous labor',
      cex.axis = 0.7)
 for (i in 1:length(dates)){
   temp_date <- dates[i]
   if(temp_date == Sys.Date()){
     col <- 'red'
+    lwd <- 3
   } else{
     col <- 'black'
+    lwd <- 1
   }
   col <- adjustcolor(col, alpha.f = 0.5)
   temp_df <- how(date = as.Date(temp_date))
   lines(temp_df$date, temp_df$cum_p, 
-        col = col)
+        col = col,
+        lwd = lwd)
 }
 abline(v = as.Date('2015-05-21'), 
        col = adjustcolor('darkblue', alpha.f = 0.6))
+
+legend('topleft',
+       lty = 1,
+       legend = c('Bottom of line = date you\'re at now',
+                  'Rest of line = your trajectory'),
+       col = 'white')
+title(main = 'When will Coloma give birth?')
