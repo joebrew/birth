@@ -7,7 +7,22 @@ df$day <- substr(df$Week, 5, 5)
 df$p <- df$Births / total
 
 # function for getting probability
-how <- function(week = 40, day = 3, date = Sys.Date()){
+how <- function(date = NULL,
+                due_date = as.Date('2015-05-21')){
+  
+  if(is.null(date)){
+    date <- Sys.Date()}
+  
+  # Get current week and day
+  day <- as.numeric(date - due_date) 
+  days <- 280 + day
+  if(day < 0){
+    day <- (700 + day) %% 7   } else {
+      day <- day %% 7
+    }
+  week <- days %/% 7
+  
+  
   #which row are you on
   d <- which(df$week == week & df$day == day)
   # get only later rows
@@ -54,7 +69,7 @@ plot(temp$date,
      lwd = 3,
      xaxt = 'n',
      xlab = NA,
-     ylab = 'Cumulative probability')
+     ylab = 'Daily probability')
 axis(side = 1,
      at = temp$date,
      labels = temp$date,
@@ -64,3 +79,25 @@ abline(h = seq(0, 100, 2),
        col = adjustcolor('black', alpha.f = 0.4))
 abline(v = temp$date, 
        col = adjustcolor('black', alpha.f = 0.6))
+
+# Cascading probabilities
+dates <- seq(Sys.Date() - 30, Sys.Date() + 15, 1)
+
+plot(dates, seq(1, 100, length = length(dates)),
+     type = 'n', xlab = 'Date',
+     ylab = 'Probability',
+     cex.axis = 0.7)
+for (i in 1:length(dates)){
+  temp_date <- dates[i]
+  if(temp_date == Sys.Date()){
+    col <- 'red'
+  } else{
+    col <- 'black'
+  }
+  col <- adjustcolor(col, alpha.f = 0.5)
+  temp_df <- how(date = as.Date(temp_date))
+  lines(temp_df$date, temp_df$cum_p, 
+        col = col)
+}
+abline(v = as.Date('2015-05-21'), 
+       col = adjustcolor('darkblue', alpha.f = 0.6))
